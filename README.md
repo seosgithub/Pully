@@ -1,7 +1,7 @@
 ![pully: A command line interface for building a pull request bot](https://raw.githubusercontent.com/sotownsend/pully/master/logo.png)
 
-[![Gem Version](https://badge.fury.io/rb/iarrogant.svg)](http://badge.fury.io/rb/pully)
-[![Build Status](https://travis-ci.org/sotownsend/pully.svg)](https://travis-ci.org/sotownsend/pully)
+[![Gem Version](https://badge.fury.io/rb/pully.svg)](http://badge.fury.io/rb/pully)
+[![Build Status](https://travis-ci.org/sotownsend/Pully.svg?branch=master)](https://travis-ci.org/sotownsend/Pully)
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/sotownsend/pully/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 [![License](http://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/sotownsend/pully/blob/master/LICENSE)
 
