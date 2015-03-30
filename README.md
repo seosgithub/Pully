@@ -25,8 +25,8 @@ pully.create_pull_request(from:"my_branch", to:"master", subject:"My pull reques
 
 ## Communication
 
-- If you **found a bug**, open an issue.
-- If you **have a feature request**, open an issue.
+- If you **found a bug**, open a pull request.
+- If you **have a feature request**, open a pull request.
 - If you **want to contribute**, submit a pull request.
 
 ## Installation
