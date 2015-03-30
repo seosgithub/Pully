@@ -20,13 +20,12 @@ pully.create_pull_request(from:"my_branch", to:"master", subject:"My pull reques
 
 ## Requirements
 
-- Mac OS X 10.9+ (Untested)
 - Ruby 2.1 or Higher
 
 ## Communication
 
-- If you **found a bug**, open a pull request.
-- If you **have a feature request**, open a pull request.
+- If you **found a bug**, submit a pull request.
+- If you **have a feature request**, submit a pull request.
 - If you **want to contribute**, submit a pull request.
 
 ## Installation
