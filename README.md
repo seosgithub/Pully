@@ -9,24 +9,6 @@
 
 A work in progress
 
-# Pully Modules
-A concept borrowed from [Rails engines](http://guides.rubyonrails.org/engines.html), Pully modules both serve as your project files, all library modules, and gemified instances.  That is, a project you create is automatically modular and can be imported in another pully module/project.
-
-# Compilation
-Pully does not rely on ruby for the final produced `application.js` file.  The output file is pure javascript and written in javascript (not transcoded).  Ruby only serves as a compilation assistant.
-
-# Task
-The task is the base unit in pully, similar to a rack module except that rack is a stack and pully is a party.  Based on concepts borrowed from XNU®, FreeBSD®, and GNU HURD®; tasks are combined in pully to produce behavior by many tasks inter-cooperating.  Efficiency has been provided through virtualizing the task communication so that no message passing takes place inside pully and all modules are combined into an efficient monolithic module.
-
-### Task Facilities
-Tasks are able to
- - send and receive events from a global or internal source.
- - set interval and timeout timers.
- - store temporary data in it's own heap '$__'
-
-### Default modules
-This pully project contains the 'micro-task-kernel', the 'ui', and the 'operations' modules.
-
 ## Requirements
 
 - Mac OS X 10.9+ (Untested)
@@ -48,7 +30,8 @@ Run `sudo gem install pully`
 
 ### When should I use pully?
 
-Todo
+When you want to automate GitHub pull requests.  Pully provides the necessary facilities for you to authenticate and control GitHub pull requests in
+any way you wish.  Duplicate the functionality of many popular CI solutions.
 
 ### What's Fittr?
 
