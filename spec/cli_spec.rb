@@ -1,7 +1,6 @@
 require './lib/pully.rb'
 require 'tempfile'
 require 'securerandom'
-require 'v8'
 
 def ensure_tmp
   tmp_spec_path = './spec/tmp'
