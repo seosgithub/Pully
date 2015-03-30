@@ -1,32 +1,36 @@
 require 'yaml'
 require 'ghee'
 require './lib/pully.rb'
+require 'securerandom'
+
+#Get github information
+def gh_info
+  yaml = YAML.load_file("./spec/test.yml")
+  return yaml["github"]
+end
+
+def repo_selector
+  return "#{gh_info["user"]}/#{gh_info["repo"]}"
+end
+
+def rand_repo_selector
+  return "#{gh_info["user"]}/#{SecureRandom.hex}"
+end
 
 RSpec.describe "Test Library" do
-  it "Does throw an exception with INcorrect credentials while creating an object" do
-    expect { pully = Pully.new(user: "abcdefgh", pass: "abcdefgh", repo: "abcdefgh") }.to raise_error(Ghee::Unauthorized)
+  it "Fails creation with incorrect credentials" do
+    expect { Pully::TestHelpers::Branch.new(user: SecureRandom.hex, pass: SecureRandom.hex, repo_selector: repo_selector) }.to raise_error(Octokit::Unauthorized)
   end
 
-  it "Does NOT throw an exception with correct credentials while creating an object" do
-    yaml = YAML.load_file("./spec/test.yml")
-    user = yaml["github"]["user"]
-    pass = yaml["github"]["pass"]
-    repo = yaml["github"]["repo"]
-
-    pully = Pully.new(user: user, pass: pass, repo: repo)
-    #No exception
+  it "does not fail creation with incorrect credentials" do
+    Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector)
   end
 
-  #it "Can call create a new pull request and returns the pull number" do
-    #yaml = YAML.load_file("./spec/test.yml")
-    #user = yaml["github"]["user"]
-    #pass = yaml["github"]["pass"]
-    #repo = yaml["github"]["repo"]
+  it "does fail creation with bad repo selector if passed a repo_selector without a /" do
+    expect { Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: SecureRandom.hex) }.to raise_error(Pully::TestHelpers::Branch::Error::BadRepoSelector)
+  end
 
-    #pully = Pully.new(user: user, pass: pass, repo: repo)
-    #n = pully.create_pull_request(from:"my_branch", to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
-    #puts n
-    #expect(n.class).to be(Integer)
-    ##No exception
-  #end
+  it "does fail creation with non-existant repository" do
+    expect { Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: rand_repo_selector) }.to raise_error(Pully::TestHelpers::Branch::Error::NoSuchRepository)
+  end
 end

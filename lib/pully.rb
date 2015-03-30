@@ -1,5 +1,6 @@
 require "pully/version"
 require 'ghee'
+require 'octokit'
 
 module Pully
   class Pully
@@ -19,9 +20,27 @@ module Pully
 
   module TestHelpers 
     class Branch
-      def initialize(user:, pass:)
+      module Error
+        class NoSuchRepository < StandardError; end
+        class BadRepoSelector < StandardError; end
+      end
+
+      #repo_selector is like 'my_user/repo'
+      def initialize(user:, pass:, repo_selector:)
         @user = user
         @pass = pass
+        @repo_selector = repo_selector
+
+        @client = Octokit::Client.new(:login => @user, :password => @pass)
+        @client.user #throw exception if auth is bad
+
+        begin
+          @client.repo(repo_selector).inspect
+        rescue ArgumentError => e
+          raise Error::BadRepoSelector
+        rescue Octokit::NotFound
+          raise Error::NoSuchRepository
+        end
       end
 
       def create_branch_off_master(name)
