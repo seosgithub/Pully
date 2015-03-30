@@ -9,6 +9,18 @@
 
 A work in progress
 
+# Basic usage
+```
+#Create a new pully object, each pully object targets (1) repository.
+user = "my_username"
+pass = "my_password"
+repo = "repo"
+pully = Pully.new(user: user, pass: pass, repo: repo)
+
+#Create a new pull request to merge 'my_branch' into 'master' with the title 'My pull request' and the message 'Hey XXX...'
+pully.create_pull_request(from:"my_branch", to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
+```
+
 ## Requirements
 
 - Mac OS X 10.9+ (Untested)
