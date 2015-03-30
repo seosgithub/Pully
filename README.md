@@ -10,7 +10,7 @@
 A work in progress
 
 # Basic usage
-```
+```ruby
 #Create a new pully object, each pully object targets (1) repository.
 pully = Pully.new("github_username", "github_password", "my_repository")
 
