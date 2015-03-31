@@ -76,7 +76,7 @@ module Pully
         #Clone repo
         begin
           @git_client = Git.clone(@clone_url, 'pully', :path => @path)
-          raise "Git client is nil?" if @git_client.nil?
+          raise "Git client is nil?" unless @git_client
         rescue Git::GitExecuteError => e
           raise Error::NoSuchCloneURL if e.message =~ /fatal: repository.*does not exist/
         end
@@ -84,6 +84,7 @@ module Pully
 
       def create_branch(new_branch_name)
         #Checkout what ever real master is
+        raise "Git client is nil?" unless @git_client
         @git_client.branch(master_branch).checkout
 
         #Create a new branch
