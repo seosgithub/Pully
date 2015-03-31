@@ -24,8 +24,7 @@ pully.write_comment_to_pull_request(pull_number, "Test Comment")
 #Get all comments
 comments = pully.comments_for_pull_request(pull_number)
 
-#Get the SHA from the last pull request (N.B. GitHub sometimes takes a minute to register uploads, it is recommended you wait atleast 5 seconds before
-checking the pull request SHA)
+#Get the SHA of the 'from' branch of a certain pull request
 pully.pull_request_from_sha(pull_number)
 ```
 
