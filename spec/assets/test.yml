@@ -4,5 +4,5 @@ github:
   repo: pully-test-account
   clone_url: git@github.com:pully-test-account/pully-test-account.git
   org_owner: pully-test-organization
-  org_repo: pully-test-organizationa
-  org_clone_url: https://github.com/pully-test-organization/pully-test-organization.git
+  org_repo: pully-test-organization
+  org_clone_url: git@github.com:pully-test-organization/pully-test-organization.git

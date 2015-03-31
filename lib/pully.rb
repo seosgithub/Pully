@@ -1,5 +1,4 @@
 require "pully/version"
-require 'ghee'
 require 'octokit'
 require 'git'
 require 'tempfile'
@@ -11,28 +10,25 @@ module Pully
       class BadLogin < StandardError; end
     end
 
-    def initialize(user:, pass:, repo:)
+    def initialize(user:, pass:, repo:, owner:)
       @user = user
       @pass = pass
       @repo = repo
-      @repo_selector = "#{@user}/#{@repo}"
+      @owner = owner
+      @repo_selector = @owner ? "#{@owner}/#{@repo}" : "#{@user}/#{@repo}"
 
-      @ghee = Ghee.basic_auth(@user, @pass)
       @gh_client = Octokit::Client.new(:login => @user, :password => @pass)
 
-      #Test authentication, to_s required to have side-effects
       begin
-        @ghee.repos(user, repo).to_s
-      rescue Ghee::Unauthorized
+        @gh_client.user #throw exception if auth is bad
+      rescue Octokit::Unauthorized
         raise Error::BadLogin
       end
-
-      @gh_client.user #throw exception if auth is bad
       raise Error::NonExistantRepository unless @gh_client.repository?(@repo_selector)
     end
 
     def create_pull_request(from:, to:, subject:, message:)
-      @ghee.repos(@user, @repo).pulls.create(:title => subject, :body => message, :base => to, :head => from)["number"]
+      @gh_client.create_pull_request(@repo_selector, to, from, subject, message)["number"]
     end
 
     def comments_for_pull_request pull_number
@@ -59,7 +55,6 @@ module Pully
         @pass = pass
         @repo_selector = repo_selector
         @clone_url = clone_url
-
 
         #Setup the local git client
         ##############################################################
@@ -146,7 +141,7 @@ module Pully
     end
   end
 
-  def self.new(user:, pass:, repo:)
-    Pully.new(user: user, pass: pass, repo: repo)
+  def self.new(user:, pass:, repo:, owner: nil)
+    Pully.new(user: user, pass: pass, repo: repo, owner: owner)
   end
 end

@@ -44,14 +44,14 @@ RSpec.describe "Library" do
     th.delete_branch(new_branch_name)
   end
 
-  it "Can call create a new pull request for an orginaziton and returns an integer for the pull request #" do
+  it "Can call create a new pull request for an organization repo and returns an integer for the pull request #" do
     #test branch creator
     new_branch_name = SecureRandom.hex
-    th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector(user: gh_info["user"], repo: gh_info["repo"], owner:nil), clone_url: gh_info["clone_url"])
+    th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector(user: gh_info["user"], repo: gh_info["org_repo"], owner:gh_info["org_owner"]), clone_url: gh_info["org_clone_url"])
     th.create_branch(new_branch_name)
     th.commit_new_random_file(new_branch_name)
 
-    pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: gh_info["repo"])
+    pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: gh_info["org_repo"], owner: gh_info["org_owner"])
     n = pully.create_pull_request(from:new_branch_name, to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
     expect(n.class).to be(Fixnum)
 
@@ -66,6 +66,25 @@ RSpec.describe "Library" do
     th.commit_new_random_file(new_branch_name)
 
     pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: gh_info["repo"])
+    pull_number = pully.create_pull_request(from:new_branch_name, to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
+
+    before_create = pully.comments_for_pull_request(pull_number).length
+    pully.write_comment_to_pull_request(pull_number, "Test Comment")
+    after_create = pully.comments_for_pull_request(pull_number).length
+
+    expect(after_create).to eq(before_create+1)
+
+    th.delete_branch(new_branch_name)
+  end
+
+  it "Can call create a new pull request and write a comment on that pull request for an organization" do
+    #test branch creator
+    new_branch_name = SecureRandom.hex
+    th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector(user: gh_info["user"], repo: gh_info["org_repo"], owner:gh_info["org_owner"]), clone_url: gh_info["org_clone_url"])
+    th.create_branch(new_branch_name)
+    th.commit_new_random_file(new_branch_name)
+
+    pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: gh_info["org_repo"], owner: gh_info["org_owner"])
     pull_number = pully.create_pull_request(from:new_branch_name, to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
 
     before_create = pully.comments_for_pull_request(pull_number).length
