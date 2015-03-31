@@ -8,6 +8,11 @@
 # What is this?
 Pully is a ruby library for managing GitHub pull requests; purpose built for our continuous integration & deployment infrastructure at [Fittr®](http://www.fittr.com).
 
+# Selling points
+1.  It's easy to use
+2.  It has full code coverage on tests involving GitHub's API
+3.  While it uses the pull request interface on GitHub, **it does not use the big green button** to perform a merge.
+
 # Basic usage
 ```ruby
 require 'pully'
@@ -33,7 +38,7 @@ pully.set_pull_request_status(pull_number, "pending")
 #Set the status of a pull request to ready
 pully.set_pull_request_status(pull_number, "success")
 
-#Merge the request
+#Merge the request (Will NOT use GitHub's pull request merge, will merge commits into history as-is)
 pully.merge_pull_request(pull_number)
 ```
 

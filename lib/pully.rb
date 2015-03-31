@@ -54,7 +54,18 @@ module Pully
     end
 
     def merge_pull_request(pull_number)
-      #@gh_client.merge(@rand_repo_selector, )
+      branches = pull_request_branches(pull_number)
+      from_name = branches[:from]
+      to_name = branches[:to]
+      @gh_client.merge(@repo_selector, to_name, from_name)
+      @gh_client.close_pull_request(@repo_selector, pull_number)
+    end
+
+    def pull_request_branches(pull_number)
+      from_name = @gh_client.pull_request(@repo_selector, pull_number).head.ref
+      to_name = @gh_client.pull_request(@repo_selector, pull_number).base.ref
+
+      return {:from => from_name, :to => to_name}
     end
 
     def pull_request_is_open?(pull_number)
