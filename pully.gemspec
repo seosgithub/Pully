@@ -25,5 +25,4 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "ghee", "~> 0.12.17"
   spec.add_runtime_dependency "octokit", "~> 3.0"
   spec.add_runtime_dependency "git", "~> 1.2.9.1"
-  spec.executables << 'pully'
 end
