@@ -162,7 +162,7 @@ RSpec.describe "Library" do
 
     pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: gh_info["repo"])
     pull_number = pully.create_pull_request(from:new_branch_name, to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
-    pully.sha_for_pull_request(pull_number)
+    pully.sha_for_pull_request(pull_number) 
 
     status = pully.pull_request_status(pull_number)
     expect(status).to eq("pending")
