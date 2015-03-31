@@ -53,12 +53,8 @@ module Pully
       @gh_client.create_status(@repo_selector, sha, status)
     end
 
-    def merge_pull_request(pull_number)
-      branches = pull_request_branches(pull_number)
-      from_name = branches[:from]
-      to_name = branches[:to]
-      @gh_client.merge(@repo_selector, to_name, from_name)
-      @gh_client.close_pull_request(@repo_selector, pull_number)
+    def merge_pull_request(pull_number, message='Merged Pull Request')
+      @gh_client.merge_pull_request(@repo_selector, pull_number, message)
     end
 
     def pull_request_branches(pull_number)
@@ -158,6 +154,11 @@ module Pully
       def latest_sha branch_name
         @git_client.checkout(branch_name)
         @git_client.object("HEAD").sha
+      end
+
+      def latest_message branch_name
+        @git_client.checkout(branch_name)
+        @git_client.object("HEAD").message
       end
 
       def master_branch
