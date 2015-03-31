@@ -1,13 +1,10 @@
-![pully: A command line interface for building a pull request bot](https://raw.githubusercontent.com/sotownsend/pully/master/logo.png)
+![pully: A ruby library for managing GitHub pull requests](https://raw.githubusercontent.com/sotownsend/pully/master/logo.png)
+Pully is a ruby library for managing GitHub pull requests, purpose built for our continuous integration / continuous deployment infrastructure @ [Fittr®](http://www.fittr.com)
 
 [![Gem Version](https://badge.fury.io/rb/pully.svg)](http://badge.fury.io/rb/pully)
 [![Build Status](https://travis-ci.org/sotownsend/Pully.svg?branch=master)](https://travis-ci.org/sotownsend/Pully)
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/sotownsend/pully/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 [![License](http://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/sotownsend/pully/blob/master/LICENSE)
-
-# What is this?
-
-A work in progress
 
 # Basic usage
 ```ruby
