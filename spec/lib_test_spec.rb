@@ -53,4 +53,21 @@ RSpec.describe "Test Library" do
     th.delete_branch(new_branch_name)
     expect(th.list_branches).not_to include(new_branch_name)
   end
+
+  it "Can create a new branch from our repository, grab the SHA of the commit, and delete it" do
+    new_branch_name = SecureRandom.hex
+    th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector, clone_url: gh_info["clone_url"])
+
+    th.create_branch(new_branch_name)
+    sha = th.commit_new_random_file(new_branch_name)
+    expect(sha.class).to be(String)
+    expect(sha.length).to be(40)
+
+    #Make sure the branch is listed in the names
+    expect(th.list_branches).to include(new_branch_name)
+
+    #Delete the branch
+    th.delete_branch(new_branch_name)
+    expect(th.list_branches).not_to include(new_branch_name)
+  end
 end
