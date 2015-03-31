@@ -17,7 +17,13 @@ require 'pully'
 pully = Pully.new("github_username", "github_password", "my_repository")
 
 #Create a new pull request to merge 'my_branch' into 'master' with the title 'My pull request' and the message 'Hey XXX...'
-pully.create_pull_request(from:"my_branch", to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
+pull_number = pully.create_pull_request(from:"my_branch", to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
+
+#Comment on that pull request
+pully.write_comment_to_pull_request(pull_number, "Test Comment")
+
+#Get all comments
+comments = pully.comments_for_pull_request(pull_number)
 ```
 
 ## Requirements

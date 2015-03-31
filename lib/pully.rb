@@ -8,15 +8,28 @@ module Pully
   class Pully
     def initialize(user:, pass:, repo:)
       @user = user
+      @pass = pass
       @repo = repo
-      @gh = Ghee.basic_auth(user, pass)
+      @repo_selector = "#{@user}/#{@repo}"
+
+      @ghee = Ghee.basic_auth(@user, @pass)
+      @gh_client = Octokit::Client.new(:login => @user, :password => @pass)
 
       #Test authentication, to_s required to have side-effects
-      @gh.repos(user, repo).to_s
+      @ghee.repos(user, repo).to_s
+      @gh_client.user #throw exception if auth is bad
     end
 
     def create_pull_request(from:, to:, subject:, message:)
-      @gh.repos(@user, @repo).pulls.create(:title => subject, :body => message, :base => to, :head => from)["number"]
+      @ghee.repos(@user, @repo).pulls.create(:title => subject, :body => message, :base => to, :head => from)["number"]
+    end
+
+    def comments_for_pull_request pull_number
+      @gh_client.issue_comments(@repo_selector, pull_number)
+    end
+
+    def write_comment_to_pull_request pull_number, comment
+      @gh_client.add_comment(@repo_selector, pull_number, comment)
     end
   end
 

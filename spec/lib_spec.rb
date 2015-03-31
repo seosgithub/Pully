@@ -30,4 +30,23 @@ RSpec.describe "Library" do
 
     th.delete_branch(new_branch_name)
   end
+
+  it "Can call create a new pull request and write a comment on that pull request" do
+    #test branch creator
+    new_branch_name = SecureRandom.hex
+    th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector, clone_url: gh_info["clone_url"])
+    th.create_branch(new_branch_name)
+    th.commit_new_random_file(new_branch_name)
+
+    pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: gh_info["repo"])
+    pull_number = pully.create_pull_request(from:new_branch_name, to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
+
+    before_create = pully.comments_for_pull_request(pull_number).length
+    pully.write_comment_to_pull_request(pull_number, "Test Comment")
+    after_create = pully.comments_for_pull_request(pull_number).length
+
+    expect(after_create).to eq(before_create+1)
+
+    th.delete_branch(new_branch_name)
+  end
 end
