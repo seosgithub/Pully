@@ -87,6 +87,8 @@ module Pully
           raise "Git client is nil?" unless @git_client
         rescue Git::GitExecuteError => e
           raise Error::NoSuchCloneURL if e.message =~ /fatal: repository.*does not exist/
+        rescue => e
+          raise "Unknown error: #{e}"
         end
       end
 
