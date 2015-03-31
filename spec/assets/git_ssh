@@ -1,0 +1,5 @@
+#!/bin/sh
+
+#Execute SSH with the private keyfile stored in ./spec/assets/
+#Used by lib_test_spec when pushing back to github
+ssh -i "./spec/assets/gh_key.private" "$@"

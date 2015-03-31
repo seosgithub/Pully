@@ -2,3 +2,4 @@ github:
   user: pully-test-account
   pass: pully-test-account0
   repo: pully-test-account
+  clone_url: git@github.com:pully-test-account/pully-test-account.git
