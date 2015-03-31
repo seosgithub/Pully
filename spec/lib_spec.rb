@@ -136,23 +136,6 @@ RSpec.describe "Library" do
     th.delete_branch(new_branch_name)
   end
 
-  it "Can get the pull request status, should be success bug BUG IN GITHUB SETS TO PENDING" do
-    #test branch creator
-    new_branch_name = SecureRandom.hex
-    th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector(user: gh_info["user"], repo: gh_info["repo"], owner:nil), clone_url: gh_info["clone_url"])
-    th.create_branch(new_branch_name)
-    th.commit_new_random_file(new_branch_name)
-
-    pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: gh_info["repo"])
-    pull_number = pully.create_pull_request(from:new_branch_name, to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
-    pully.sha_for_pull_request(pull_number)
-
-    status = pully.pull_request_status(pull_number)
-    expect(status).to eq("pending")
-
-    th.delete_branch(new_branch_name)
-  end
-
   it "Can set the pull request status to success, assumes BUG IN GITHUB SETS TO PENDING" do
     #test branch creator
     new_branch_name = SecureRandom.hex
