@@ -9,18 +9,45 @@ def gh_info
 end
 
 RSpec.describe "Library" do
+  def repo_selector(user:, repo:, owner:)
+    return "#{user}/#{repo}" unless owner
+    return "#{owner}/#{repo}"
+  end
+
   it "Does throw an exception with INcorrect credentials while creating an object" do
-    expect { pully = Pully.new(user: "abcdefgh", pass: "abcdefgh", repo: "abcdefgh") }.to raise_error(Ghee::Unauthorized)
+    expect { pully = Pully.new(user: "abcdefgh", pass: "abcdefgh", repo: "abcdefgh") }.to raise_error(Pully::Pully::Error::BadLogin)
   end
 
   it "Does NOT throw an exception with correct credentials while creating an object" do
     pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: gh_info["repo"])
   end
 
+  it "DOES throw an exception with correct credentials while creating an object but with a non-existant repository" do
+    expect { pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: SecureRandom.hex) }.to raise_error(Pully::Pully::Error::NonExistantRepository)
+  end
+
+  #it "Does throw an exception with correct credentials while creating an object with an alternate owner but without specifying that owner" do
+    #expect { pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: gh_info["org_repo"])}.to raise_error
+  #end
+
   it "Can call create a new pull request and returns an integer for the pull request #" do
     #test branch creator
     new_branch_name = SecureRandom.hex
-    th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector, clone_url: gh_info["clone_url"])
+    th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector(user: gh_info["user"], repo: gh_info["repo"], owner:nil), clone_url: gh_info["clone_url"])
+    th.create_branch(new_branch_name)
+    th.commit_new_random_file(new_branch_name)
+
+    pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: gh_info["repo"])
+    n = pully.create_pull_request(from:new_branch_name, to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
+    expect(n.class).to be(Fixnum)
+
+    th.delete_branch(new_branch_name)
+  end
+
+  it "Can call create a new pull request for an orginaziton and returns an integer for the pull request #" do
+    #test branch creator
+    new_branch_name = SecureRandom.hex
+    th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector(user: gh_info["user"], repo: gh_info["repo"], owner:nil), clone_url: gh_info["clone_url"])
     th.create_branch(new_branch_name)
     th.commit_new_random_file(new_branch_name)
 
@@ -34,7 +61,7 @@ RSpec.describe "Library" do
   it "Can call create a new pull request and write a comment on that pull request" do
     #test branch creator
     new_branch_name = SecureRandom.hex
-    th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector, clone_url: gh_info["clone_url"])
+    th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector(user: gh_info["user"], repo: gh_info["repo"], owner:nil), clone_url: gh_info["clone_url"])
     th.create_branch(new_branch_name)
     th.commit_new_random_file(new_branch_name)
 

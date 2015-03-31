@@ -3,21 +3,22 @@ require 'ghee'
 require './lib/pully.rb'
 require 'securerandom'
 
-#Get github information
-def gh_info
-  yaml = YAML.load_file("./spec/assets/test.yml")
-  return yaml["github"]
-end
-
-def repo_selector
-  return "#{gh_info["user"]}/#{gh_info["repo"]}"
-end
-
-def rand_repo_selector
-  return "#{gh_info["user"]}/#{SecureRandom.hex}"
-end
 
 RSpec.describe "Test Library" do
+  #Get github information
+  def gh_info
+    yaml = YAML.load_file("./spec/assets/test.yml")
+    return yaml["github"]
+  end
+
+  def repo_selector
+    return "#{gh_info["user"]}/#{gh_info["repo"]}"
+  end
+
+  def rand_repo_selector
+    return "#{gh_info["user"]}/#{SecureRandom.hex}"
+  end
+
   it "Fails creation with incorrect credentials" do
     expect { Pully::TestHelpers::Branch.new(user: SecureRandom.hex, pass: SecureRandom.hex, repo_selector: repo_selector, clone_url: gh_info["clone_url"]) }.to raise_error(Pully::TestHelpers::Branch::Error::BadLogin)
   end

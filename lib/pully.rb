@@ -6,6 +6,11 @@ require 'tempfile'
 
 module Pully
   class Pully
+    module Error
+      class NonExistantRepository < StandardError; end
+      class BadLogin < StandardError; end
+    end
+
     def initialize(user:, pass:, repo:)
       @user = user
       @pass = pass
@@ -16,8 +21,14 @@ module Pully
       @gh_client = Octokit::Client.new(:login => @user, :password => @pass)
 
       #Test authentication, to_s required to have side-effects
-      @ghee.repos(user, repo).to_s
+      begin
+        @ghee.repos(user, repo).to_s
+      rescue Ghee::Unauthorized
+        raise Error::BadLogin
+      end
+
       @gh_client.user #throw exception if auth is bad
+      raise Error::NonExistantRepository unless @gh_client.repository?(@repo_selector)
     end
 
     def create_pull_request(from:, to:, subject:, message:)
