@@ -128,6 +128,7 @@ RSpec.describe "Library" do
     expect(local_sha_a).to eq(from_sha_a)
 
     local_sha_b = th.commit_new_random_file(new_branch_name)
+    sleep 5 #Wait for GitHub to update
     from_sha_b = pully.sha_for_pull_request(pull_number)
     expect(local_sha_b).not_to eq(local_sha_a)
     expect(local_sha_b).to eq(from_sha_b)
