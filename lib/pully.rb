@@ -39,7 +39,7 @@ module Pully
       @gh_client.add_comment(@repo_selector, pull_number, comment)
     end
 
-    def pull_request_from_sha pull_number
+    def sha_for_pull_request pull_number
       @gh_client.pull_request(@repo_selector, pull_number).head.sha
     end
   end

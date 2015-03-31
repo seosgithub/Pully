@@ -106,7 +106,7 @@ RSpec.describe "Library" do
     pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: gh_info["repo"])
     pull_number = pully.create_pull_request(from:new_branch_name, to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
 
-    from_sha = pully.pull_request_from_sha(pull_number)
+    from_sha = pully.sha_for_pull_request(pull_number)
 
     expect(local_sha).to eq(from_sha)
 
@@ -124,11 +124,11 @@ RSpec.describe "Library" do
     pull_number = pully.create_pull_request(from:new_branch_name, to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
 
     #Get the SHA from the pull request
-    from_sha_a = pully.pull_request_from_sha(pull_number)
+    from_sha_a = pully.sha_for_pull_request(pull_number)
     expect(local_sha_a).to eq(from_sha_a)
 
     local_sha_b = th.commit_new_random_file(new_branch_name)
-    from_sha_b = pully.pull_request_from_sha(pull_number)
+    from_sha_b = pully.sha_for_pull_request(pull_number)
     expect(local_sha_b).not_to eq(local_sha_a)
     expect(local_sha_b).to eq(from_sha_b)
 

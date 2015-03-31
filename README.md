@@ -25,7 +25,7 @@ pully.write_comment_to_pull_request(pull_number, "Test Comment")
 comments = pully.comments_for_pull_request(pull_number)
 
 #Get the SHA of the 'from' branch of a certain pull request
-pully.pull_request_from_sha(pull_number)
+pully.sha_for_pull_request(pull_number)
 ```
 
 # Organization Repositories
