@@ -95,4 +95,21 @@ RSpec.describe "Library" do
 
     th.delete_branch(new_branch_name)
   end
+
+  it "Can call create a new pull request, get the SHA of that pull request, and compare it to the SHA of the from branch" do
+    #test branch creator
+    new_branch_name = SecureRandom.hex
+    th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector(user: gh_info["user"], repo: gh_info["repo"], owner:nil), clone_url: gh_info["clone_url"])
+    th.create_branch(new_branch_name)
+    local_sha = th.commit_new_random_file(new_branch_name)
+
+    pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: gh_info["repo"])
+    pull_number = pully.create_pull_request(from:new_branch_name, to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
+
+    from_sha = pully.pull_request_from_sha(pull_number)
+
+    expect(local_sha).to eq(from_sha)
+
+    th.delete_branch(new_branch_name)
+  end
 end
