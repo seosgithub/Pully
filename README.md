@@ -14,7 +14,7 @@ A work in progress
 require 'pully'
 
 #Create a new pully object, each pully object targets (1) repository.
-pully = Pully.new("github_username", "github_password", "my_repository")
+pully = Pully.new(user:"github_username", pass:"github_password", repo:"my_repository")
 
 #Create a new pull request to merge 'my_branch' into 'master' with the title 'My pull request' and the message 'Hey XXX...'
 pull_number = pully.create_pull_request(from:"my_branch", to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
