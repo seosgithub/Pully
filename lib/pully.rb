@@ -69,6 +69,10 @@ module Pully
 
       #Will clone down repo and set @gh_client to the new repo
       def clone_repo
+        puts "CLONE STARTED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        puts "CLONE STARTED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        puts "CLONE STARTED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        puts "CLONE STARTED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
         #Create a temp path
         temp_file = Tempfile.new('pully')
         @path = temp_file.path
@@ -77,7 +81,9 @@ module Pully
 
         #Clone repo
         begin
+          puts "ENTERING BEGIN"
           @git_client = Git.clone(@clone_url, 'pully', :path => @path)
+          puts "#{@git_client}"
           raise "Git client is nil?" unless @git_client
         rescue Git::GitExecuteError => e
           raise Error::NoSuchCloneURL if e.message =~ /fatal: repository.*does not exist/
