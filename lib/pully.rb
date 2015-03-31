@@ -73,10 +73,6 @@ module Pully
         temp_file.close
         temp_file.unlink
 
-        puts "-----------------------------------------------------"
-        puts "temp_file = #{@path}"
-        puts "-----------------------------------------------------"
-
         #Clone repo
         begin
           @git_client = Git.clone(@clone_url, 'pully', :path => @path)
