@@ -22,8 +22,6 @@ module Pully
 
   module TestHelpers 
     class Branch
-      attr_accessor :git_client
-
       module Error
         class NoSuchRepository < StandardError; end
         class BadRepoSelector < StandardError; end
@@ -69,10 +67,6 @@ module Pully
 
       #Will clone down repo and set @gh_client to the new repo
       def clone_repo
-        puts "CLONE STARTED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-        puts "CLONE STARTED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-        puts "CLONE STARTED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-        puts "CLONE STARTED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
         #Create a temp path
         temp_file = Tempfile.new('pully')
         @path = temp_file.path
@@ -81,19 +75,15 @@ module Pully
 
         #Clone repo
         begin
-          puts "ENTERING BEGIN"
           @git_client = Git.clone(@clone_url, 'pully', :path => @path)
-          puts "========== #{@git_client.inspect} #{@git_client} =============="
-          raise "Git client is nil?" unless @git_client
         rescue Git::GitExecuteError => e
           raise Error::NoSuchCloneURL if e.message =~ /fatal: repository.*does not exist/
-          raise "Unknown error: #{e}"
+          raise "Unknown git execute error: #{e}"
         end
       end
 
       def create_branch(new_branch_name)
         #Checkout what ever real master is
-        raise "Git client is nil?" unless @git_client
         @git_client.branch(master_branch).checkout
 
         #Create a new branch

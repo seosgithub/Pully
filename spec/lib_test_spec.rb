@@ -42,9 +42,6 @@ RSpec.describe "Test Library" do
     new_branch_name = SecureRandom.hex
     th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector, clone_url: gh_info["clone_url"])
 
-    #Make sure git_client is available
-    expect(th.git_client).not_to be(nil)
-
     th.create_branch(new_branch_name)
     th.commit_new_random_file(new_branch_name)
 
