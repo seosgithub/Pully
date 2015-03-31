@@ -26,7 +26,7 @@ pully.write_comment_to_pull_request(pull_number, "Test Comment")
 comments = pully.comments_for_pull_request(pull_number)
 ```
 
-# Organization / Repositories not owned by you
+# Organization Repositories
 If your repositories are not owner by you, i.e. they are owned by an organization or another user who has granted you permissions, you will need to
 pass the `owner` field for the other individual or organization.
 
