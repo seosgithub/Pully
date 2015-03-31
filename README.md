@@ -26,6 +26,16 @@ pully.write_comment_to_pull_request(pull_number, "Test Comment")
 comments = pully.comments_for_pull_request(pull_number)
 ```
 
+# Organization / Repositories not owned by you
+If your repositories are not owner by you, i.e. they are owned by an organization or another user who has granted you permissions, you will need to
+pass the `owner` field for the other individual or organization.
+
+```ruby
+#Create a new pully object, each pully object targets (1) repository in an organization.
+pully = Pully.new(user:"github_username", pass:"github_password", repo:"my_repository", owner:"my_organization")
+
+```
+
 ## Requirements
 
 - Ruby 2.1 or Higher
