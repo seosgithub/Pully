@@ -52,6 +52,13 @@ pully = Pully.new(user:"github_username", pass:"github_password", repo:"my_repos
 
 Run `sudo gem install pully`
 
+## Known issues
+
+1. GitHub does not register commits immediately after a push is received. Things like `sha_for_pull_request` will return old values if you don't wait
+   several seconds
+2. GitHub's status API for pull requests returns 'pending' even if the UI says 'success'. We account for this bug, but if it is fixed in the future,
+   then our specs will catch it
+
 ---
 
 ## FAQ
