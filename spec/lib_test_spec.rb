@@ -63,11 +63,7 @@ RSpec.describe "Test Library" do
     expect(sha.class).to be(String)
     expect(sha.length).to be(40)
 
-    #Make sure the branch is listed in the names
-    expect(th.list_branches).to include(new_branch_name)
-
     #Delete the branch
     th.delete_branch(new_branch_name)
-    expect(th.list_branches).not_to include(new_branch_name)
   end
 end
