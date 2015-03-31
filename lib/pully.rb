@@ -16,7 +16,7 @@ module Pully
     end
 
     def create_pull_request(from:, to:, subject:, message:)
-      @gh.repos(@user, @repo).pulls.create(:title => subject, :body => message, :base => to, :head => from)
+      @gh.repos(@user, @repo).pulls.create(:title => subject, :body => message, :base => to, :head => from)["number"]
     end
   end
 

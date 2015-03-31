@@ -5,7 +5,7 @@ require 'securerandom'
 
 #Get github information
 def gh_info
-  yaml = YAML.load_file("./spec/test.yml")
+  yaml = YAML.load_file("./spec/assets/test.yml")
   return yaml["github"]
 end
 
