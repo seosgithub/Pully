@@ -26,6 +26,12 @@ comments = pully.comments_for_pull_request(pull_number)
 
 #Get the SHA of the 'from' branch of a certain pull request
 pully.sha_for_pull_request(pull_number)
+
+#Set the status of a pull request to pending (Other options include 'error', 'failed', and 'success')
+pully.set_pull_request_status(pull_number, "pending")
+
+#Set the status of a pull request to ready
+pully.set_pull_request_status(pull_number, "success")
 ```
 
 # Organization Repositories
