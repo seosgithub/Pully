@@ -50,7 +50,6 @@ module Pully
 
     def set_pull_request_status(pull_number, status)
       sha = sha_for_pull_request pull_number
-      require 'pry'; binding.pry
       @gh_client.create_status(@repo_selector, sha, status)
     end
   end
