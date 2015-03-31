@@ -220,4 +220,21 @@ RSpec.describe "Library" do
 
     th.delete_branch(new_branch_name)
   end
+
+  it "Can list pull requests" do
+    sleep 10
+    #test branch creator
+    new_branch_name = SecureRandom.hex
+    th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector(user: gh_info["user"], repo: gh_info["repo"], owner:nil), clone_url: gh_info["clone_url"])
+    th.create_branch(new_branch_name)
+    last_sha = th.commit_new_random_file(new_branch_name)
+
+    pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: gh_info["repo"])
+    pull_number = pully.create_pull_request(from:new_branch_name, to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
+
+    expect(pully.pull_requests).to include(pull_number)
+
+    th.delete_branch(new_branch_name)
+
+  end
 end
