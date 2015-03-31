@@ -76,6 +76,8 @@ module Pully
         #Clone repo
         begin
           @git_client = Git.clone(@clone_url, 'pully', :path => @path)
+          @git_client.config("user.name", "pully-test-account")
+          @git_client.config("user.email", "pully-test-account@gmail.com")
         rescue Git::GitExecuteError => e
           raise Error::NoSuchCloneURL if e.message =~ /fatal: repository.*does not exist/
           raise "Unknown git execute error: #{e}"
