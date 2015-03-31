@@ -22,6 +22,8 @@ module Pully
 
   module TestHelpers 
     class Branch
+      attr_accessor :git_client
+
       module Error
         class NoSuchRepository < StandardError; end
         class BadRepoSelector < StandardError; end
