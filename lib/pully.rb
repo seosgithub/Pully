@@ -136,7 +136,10 @@ module Pully
         #Commit
         @git_client.add(:all => true)
         @git_client.commit_all("New branch from Pully Test Suite #{SecureRandom.hex}")
+        local_sha = @git_client.object("HEAD").sha
         @git_client.push("origin", branch_name)
+
+        return local_sha
       end
     end
   end
