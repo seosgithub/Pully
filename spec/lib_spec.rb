@@ -112,4 +112,25 @@ RSpec.describe "Library" do
 
     th.delete_branch(new_branch_name)
   end
+
+  it "Changes the SHA when commits are added after a pull request" do
+    #test branch creator
+    new_branch_name = SecureRandom.hex
+    th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector(user: gh_info["user"], repo: gh_info["repo"], owner:nil), clone_url: gh_info["clone_url"])
+    th.create_branch(new_branch_name)
+    local_sha_a = th.commit_new_random_file(new_branch_name)
+
+    pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: gh_info["repo"])
+    pull_number = pully.create_pull_request(from:new_branch_name, to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
+
+    #Get the SHA from the pull request
+    from_sha_a = pully.pull_request_from_sha(pull_number)
+    expect(local_sha_a).to eq(from_sha_a)
+
+    local_sha_b = th.commit_new_random_file(new_branch_name)
+    from_sha_b = pully.pull_request_from_sha(pull_number)
+    expect(local_sha_b).to eq(from_sha_b)
+
+    th.delete_branch(new_branch_name)
+  end
 end
