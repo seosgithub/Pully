@@ -134,7 +134,7 @@ module Pully
       def commit_new_random_file(branch_name)
         #Create a new file
         Dir.chdir "#{@path}/pully" do
-          File.write branch_name, branch_name
+          File.write "#{branch_name}.#{SecureRandom.hex}", branch_name
         end
 
         #Commit

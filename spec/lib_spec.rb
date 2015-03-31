@@ -129,6 +129,7 @@ RSpec.describe "Library" do
 
     local_sha_b = th.commit_new_random_file(new_branch_name)
     from_sha_b = pully.pull_request_from_sha(pull_number)
+    expect(local_sha_b).not_to eq(local_sha_a)
     expect(local_sha_b).to eq(from_sha_b)
 
     th.delete_branch(new_branch_name)
