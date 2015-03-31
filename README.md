@@ -32,6 +32,9 @@ pully.set_pull_request_status(pull_number, "pending")
 
 #Set the status of a pull request to ready
 pully.set_pull_request_status(pull_number, "success")
+
+#Merge the request
+pully.merge_pull_request(pull_number)
 ```
 
 # Organization Repositories

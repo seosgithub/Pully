@@ -52,6 +52,14 @@ module Pully
       sha = sha_for_pull_request pull_number
       @gh_client.create_status(@repo_selector, sha, status)
     end
+
+    def merge_pull_request(pull_number)
+      #@gh_client.merge(@rand_repo_selector, )
+    end
+
+    def pull_request_is_open?(pull_number)
+      @gh_client.pull_request(@repo_selector, pull_number)["state"] == 'open'
+    end
   end
 
   module TestHelpers 
@@ -134,6 +142,11 @@ module Pully
         #Re-pull repo from github
         clone_repo
         @git_client.branches.remote.map{|e| e.name}
+      end
+
+      def latest_sha branch_name
+        @git_client.checkout(branch_name)
+        @git_client.object("HEAD").sha
       end
 
       def master_branch

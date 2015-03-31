@@ -31,6 +31,7 @@ RSpec.describe "Library" do
   #end
 
   it "Can call create a new pull request and returns an integer for the pull request #" do
+    sleep 10
     #test branch creator
     new_branch_name = SecureRandom.hex
     th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector(user: gh_info["user"], repo: gh_info["repo"], owner:nil), clone_url: gh_info["clone_url"])
@@ -45,6 +46,7 @@ RSpec.describe "Library" do
   end
 
   it "Can call create a new pull request for an organization repo and returns an integer for the pull request #" do
+    sleep 10
     #test branch creator
     new_branch_name = SecureRandom.hex
     th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector(user: gh_info["user"], repo: gh_info["org_repo"], owner:gh_info["org_owner"]), clone_url: gh_info["org_clone_url"])
@@ -97,6 +99,7 @@ RSpec.describe "Library" do
   end
 
   it "Can call create a new pull request, get the SHA of that pull request, and compare it to the SHA of the from branch" do
+    sleep 10
     #test branch creator
     new_branch_name = SecureRandom.hex
     th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector(user: gh_info["user"], repo: gh_info["repo"], owner:nil), clone_url: gh_info["clone_url"])
@@ -114,6 +117,7 @@ RSpec.describe "Library" do
   end
 
   it "Changes the SHA when commits are added after a pull request" do
+    sleep 10
     #test branch creator
     new_branch_name = SecureRandom.hex
     th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector(user: gh_info["user"], repo: gh_info["repo"], owner:nil), clone_url: gh_info["clone_url"])
@@ -137,6 +141,7 @@ RSpec.describe "Library" do
   end
 
   it "Can set the pull request status to success, assumes BUG IN GITHUB SETS TO PENDING" do
+    sleep 10
     #test branch creator
     new_branch_name = SecureRandom.hex
     th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector(user: gh_info["user"], repo: gh_info["repo"], owner:nil), clone_url: gh_info["clone_url"])
@@ -153,6 +158,47 @@ RSpec.describe "Library" do
     pully.set_pull_request_status(pull_number, "success")
     status = pully.pull_request_status(pull_number)
     expect(status).to eq("success") 
+
+    th.delete_branch(new_branch_name)
+  end
+
+  it "Can get the from and to names of the pull request" do
+    sleep 10
+    #test branch creator
+    new_branch_name = SecureRandom.hex
+    th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector(user: gh_info["user"], repo: gh_info["repo"], owner:nil), clone_url: gh_info["clone_url"])
+    th.create_branch(new_branch_name)
+    th.commit_new_random_file(new_branch_name)
+
+    pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: gh_info["repo"])
+    pull_number = pully.create_pull_request(from:new_branch_name, to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
+    branches = pully.pull_request_branches(pull_number) 
+
+    expect(branches[:from]).to eq(new_branch_name)
+    expect(branches[:to]).to eq("master")
+
+    th.delete_branch(new_branch_name)
+
+  end
+
+  it "Can merge the pull request into master" do
+    sleep 10
+    #test branch creator
+    new_branch_name = SecureRandom.hex
+    th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector(user: gh_info["user"], repo: gh_info["repo"], owner:nil), clone_url: gh_info["clone_url"])
+    th.create_branch(new_branch_name)
+    last_sha = th.commit_new_random_file(new_branch_name)
+
+    pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: gh_info["repo"])
+    pull_number = pully.create_pull_request(from:new_branch_name, to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
+    pully.merge_pull_request(pull_number)
+
+    #Check leading sha
+    th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector(user: gh_info["user"], repo: gh_info["repo"], owner:nil), clone_url: gh_info["clone_url"])
+    expect(th.latest_sha("master")).to eq(last_sha)
+
+    #We expect the pull request to be closed
+    expect(pully.pull_request_is_open?(pull_number)).to eq(false)
 
     th.delete_branch(new_branch_name)
   end
