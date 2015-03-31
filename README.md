@@ -6,7 +6,7 @@
 [![License](http://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/sotownsend/pully/blob/master/LICENSE)
 
 # What is this?
-Pully is a ruby library for managing GitHub pull requests, purpose built for our continuous integration & deployment infrastructure at [Fittr®](http://www.fittr.com)
+Pully is a ruby library for managing GitHub pull requests; purpose built for our continuous integration & deployment infrastructure at [Fittr®](http://www.fittr.com)
 
 # Basic usage
 ```ruby
