@@ -26,11 +26,11 @@ RSpec.describe "Library" do
     expect { pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: SecureRandom.hex) }.to raise_error(Pully::Pully::Error::NonExistantRepository)
   end
 
-  #it "Does throw an exception with correct credentials while creating an object with an alternate owner but without specifying that owner" do
-    #expect { pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: gh_info["org_repo"])}.to raise_error
-  #end
+  it "Does throw an exception with correct credentials while creating an object with an alternate owner but without specifying that owner" do
+    expect { pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: gh_info["org_repo"])}.to raise_error
+  end
 
-  it "Can call create a new pull request and returns an integer for the pull request #" do
+ it "Can call create a new pull request and returns an integer for the pull request #" do
     sleep 10
     #test branch creator
     new_branch_name = SecureRandom.hex
@@ -233,6 +233,29 @@ RSpec.describe "Library" do
     pull_number = pully.create_pull_request(from:new_branch_name, to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
 
     expect(pully.pull_requests).to include(pull_number)
+
+    th.delete_branch(new_branch_name)
+
+  end
+
+  it "Can list all success and pending pull requests" do
+    sleep 10
+    new_branch_name = SecureRandom.hex
+    new_branch_name2 = SecureRandom.hex
+    th = Pully::TestHelpers::Branch.new(user: gh_info["user"], pass: gh_info["pass"], repo_selector: repo_selector(user: gh_info["user"], repo: gh_info["repo"], owner:nil), clone_url: gh_info["clone_url"])
+    th.create_branch(new_branch_name)
+    th.commit_new_random_file(new_branch_name)
+
+    th.create_branch(new_branch_name2)
+    th.commit_new_random_file(new_branch_name2)
+
+    pully = Pully.new(user: gh_info["user"], pass: gh_info["pass"], repo: gh_info["repo"])
+    pull_number = pully.create_pull_request(from:new_branch_name, to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
+    pull_number2 = pully.create_pull_request(from:new_branch_name2, to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
+    pully.set_pull_request_status(pull_number, 'error')
+
+    expect(pully.open_or_pending_pull_requests).not_to include(pull_number)
+    expect(pully.open_or_pending_pull_requests).to include(pull_number2)
 
     th.delete_branch(new_branch_name)
 

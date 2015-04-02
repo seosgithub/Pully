@@ -52,6 +52,12 @@ module Pully
       return @gh_client.pull_requests(@repo_selector, :state => 'open').map{|e| e["number"]}
     end
 
+    def open_or_pending_pull_requests
+      requests = @gh_client.pull_requests(@repo_selector, :state => 'open').map{|e| e["number"]}
+      requests.select!{|e| ["open", "pending"].include? pull_request_status(e) }
+      requests
+    end
+
     def set_pull_request_status(pull_number, status)
       sha = sha_for_pull_request pull_number
       @gh_client.create_status(@repo_selector, sha, status)

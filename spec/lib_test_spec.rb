@@ -65,5 +65,5 @@ RSpec.describe "Test Library" do
 
     #Delete the branch
     th.delete_branch(new_branch_name)
-  end
+ end
 end

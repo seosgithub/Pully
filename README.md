@@ -23,6 +23,9 @@ pully = Pully.new(user:"github_username", pass:"github_password", repo:"my_repos
 #Get a list of all open pull requests (An array of pull numbers)
 open = pully.pull_requests
 
+#Get a list of all open pull requests marked as pending or success
+open_and_pending_or_success = pully.open_or_pending_pull_requests
+
 #Create a new pull request to merge 'my_branch' into 'master' with the title 'My pull request' and the message 'Hey XXX...'
 pull_number = pully.create_pull_request(from:"my_branch", to:"master", subject:"My pull request", message:"Hey XXXX, can you merge this for me?")
 
